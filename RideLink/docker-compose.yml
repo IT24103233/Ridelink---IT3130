@@ -27,4 +27,5 @@ services:
 
 volumes:
   ride-mongo-data:
+    external: true
     name: ride-service_ride-mongo-data
