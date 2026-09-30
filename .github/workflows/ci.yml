@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and test Ride Service
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: RideLink/ride-service/ride-service
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+          cache: maven
+          cache-dependency-path: RideLink/ride-service/ride-service/pom.xml
+
+      - name: Build and test
+        run: bash ./mvnw -B clean verify
