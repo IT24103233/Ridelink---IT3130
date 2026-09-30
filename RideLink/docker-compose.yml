@@ -3,10 +3,10 @@ services:
     image: mongo:7.0
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27018:27017"
     volumes:
       - ride-mongo-data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/01-ride.js:ro
+      - ./ride-service/ride-service/mongo-init.js:/docker-entrypoint-initdb.d/01-ride.js:ro
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
       interval: 5s
@@ -14,7 +14,8 @@ services:
       retries: 20
 
   ride-service:
-    build: .
+    build:
+      context: ./ride-service/ride-service
     restart: unless-stopped
     depends_on:
       mongo:
@@ -26,3 +27,4 @@ services:
 
 volumes:
   ride-mongo-data:
+    name: ride-service_ride-mongo-data
