@@ -47,7 +47,24 @@ This project demonstrates a typical distributed system setup using Spring Boot a
 
 ### Run the services
 
-Run each Spring Boot service in order.
+Install Java 22 and use Bash (Git Bash or WSL on Windows). The ride service also
+requires MongoDB on port `27018`. From the repository root, start MongoDB with
+Docker Compose:
+
+```bash
+docker volume create ride-service_ride-mongo-data
+docker compose -f RideLink/docker-compose.yml up -d mongo
+```
+
+Then start all four Spring Boot services from the repository root with one
+command:
+
+```bash
+bash ./run-services.sh
+```
+
+The script starts each service in parallel and stops them when you press
+`Ctrl+C`. On Windows PowerShell, run it from Git Bash or WSL.
 
 ## Assignment Context
 
