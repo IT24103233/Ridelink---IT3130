@@ -1,18 +1,18 @@
 package com.ridelink.fare_payment_service.model;
 
-import jakarta.persistence.*;
-
 import java.time.Instant;
+import java.util.UUID;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 // A quote generated before (or without) a ride existing - rideId is
 // nullable because an estimate can be requested pre-booking.
-@Entity
-@Table(name = "fare_estimates")
+@Document(collection = "fare_estimates")
 public class FareEstimate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     private String rideId;
 

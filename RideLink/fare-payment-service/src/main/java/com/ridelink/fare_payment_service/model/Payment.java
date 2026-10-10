@@ -1,19 +1,20 @@
 package com.ridelink.fare_payment_service.model;
 
-import jakarta.persistence.*;
-
 import java.time.Instant;
+import java.util.UUID;
 
-@Entity
-@Table(name = "payments", uniqueConstraints = @UniqueConstraint(columnNames = "rideId"))
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "payments")
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     // One payment per ride.
-    @Column(nullable = false, unique = true)
+    @Indexed(unique = true)
     private String rideId;
 
     private String passengerId;

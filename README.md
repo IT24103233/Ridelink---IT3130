@@ -4,7 +4,7 @@ RideLink is a Java-based microservice project designed for a ride-sharing assign
 
 ## Project Purpose
 
-This project demonstrates a typical distributed system setup using Spring Boot and H2 database. Each service is independent and communicates with the others through REST APIs.
+This project demonstrates a typical distributed system setup using Spring Boot and MongoDB. Each service is independent, owns a separate MongoDB database, and communicates with the others through REST APIs.
 
 ## Services
 
@@ -33,7 +33,7 @@ This project demonstrates a typical distributed system setup using Spring Boot a
 - Java 22
 - Spring Boot 4.1.1
 - Maven
-- H2 Database
+- MongoDB (a separate database per service)
 - Docker
 - REST APIs
 
@@ -43,21 +43,19 @@ This project demonstrates a typical distributed system setup using Spring Boot a
 
 - Java 22
 - Maven
-- H2 database support (embedded in each service)
+- Docker Desktop with Docker Compose for MongoDB
 
 ### Run the services
 
-Install Java 22 and use Bash (Git Bash or WSL on Windows). The ride service also
-requires MongoDB on port `27018`. From the repository root, start MongoDB with
-Docker Compose:
+Install Java 22, Docker Desktop, and Bash (Git Bash or WSL on Windows). From the
+repository root, start MongoDB on port `27018`:
 
 ```bash
 docker volume create ride-service_ride-mongo-data
 docker compose -f RideLink/docker-compose.yml up -d mongo
 ```
 
-Then start all four Spring Boot services from the repository root with one
-command:
+Then start all four Spring Boot services from the repository root:
 
 ```bash
 bash ./run-services.sh
@@ -65,6 +63,12 @@ bash ./run-services.sh
 
 The script starts each service in parallel and stops them when you press
 `Ctrl+C`. On Windows PowerShell, run it from Git Bash or WSL.
+
+Each service connects to the same MongoDB server but uses its own database:
+`ridelink_account`, `ridelink_driver`, `ridelink_ride`, and `ridelink_fare`.
+The configured `MONGODB_URI` environment variable can override a service's
+default URI. In MongoDB Compass, connect to `mongodb://localhost:27018`; each
+database contains only that service's collections.
 
 ## Assignment Context
 
@@ -75,28 +79,6 @@ This project is intended as a basic academic assignment implementation of a ride
 - This version is kept simple and assignment-focused.
 - GitHub-specific repository branding and deployment references have been removed for portability and reuse.
 
-```bash
-# 1. Account Service — auth for everything else
-cd account-service/account-service
-./mvnw spring-boot:run          # → http://localhost:8081
- 
-# 2. Driver & Vehicle Service — no dependencies
-cd driver-service/driver-service
-./mvnw spring-boot:run          # → http://localhost:8082
- 
-# 3. Ride Management Service — depends on Driver Service
-cd ride-service/ride-service
-./mvnw spring-boot:run          # → http://localhost:8083
- 
-# 4. Fare & Payment Service — depends on Ride Service
-cd fare-payment-service/fare-payment-service
-./mvnw spring-boot:run          # → http://localhost:8084
-```
- 
-> 📁 Each service's Maven project lives one folder deeper than its top-level directory name (a leftover from the original Spring Initializr scaffold) — adjust the `cd` path if yours has been flattened since.
- 
-Each service uses an in-memory H2 database. The database is initialized automatically by Spring Boot and is available through the configured H2 datasource.
- 
 ### 📚 Swagger UI
  
 Once a service is running, its live API docs are at:
