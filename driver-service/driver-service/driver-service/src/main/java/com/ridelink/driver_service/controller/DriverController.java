@@ -61,6 +61,7 @@ public class DriverController {
     // since a token is optional rather than required - Swagger UI's
     // "Authorize" flow is only needed if you want to exercise this as the
     // driver-role self-service call rather than the anonymous one.
+    
     @Operation(description = "Optionally requires a DRIVER-role bearer token: supply one to exercise this "
             + "as a driver's own self-service toggle, or omit it to exercise the anonymous interservice call "
             + "ride-service makes on ride assignment.")
