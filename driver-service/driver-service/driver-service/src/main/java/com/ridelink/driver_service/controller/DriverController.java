@@ -34,6 +34,7 @@ public class DriverController {
 
     // Public - this is the interservice lookup ride-service's DriverClient
     // calls with no token.
+    
     @GetMapping("/available")
     @SecurityRequirements
     public List<Driver> getAvailable() {
