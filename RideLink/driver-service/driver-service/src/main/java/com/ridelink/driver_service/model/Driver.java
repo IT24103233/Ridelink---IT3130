@@ -1,39 +1,36 @@
 package com.ridelink.driver_service.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import java.util.UUID;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 // Bound directly from the request body on creation (see DriverController) -
 // this service has no separate DTO layer, so the validation constraints
 // that would normally live on a request DTO live here instead.
-@Entity
-@Table(name = "drivers")
+@Document(collection = "drivers")
 public class Driver {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
-    @Column(nullable = false)
+    @Indexed
     private String accountId;
 
     @NotBlank(message = "name is required")
-    @Column(nullable = false)
     private String name;
 
     @NotBlank(message = "vehicleNumber is required")
-    @Column(nullable = false)
     private String vehicleNumber;
 
     @NotBlank(message = "vehicleType is required")
-    @Column(nullable = false)
     private String vehicleType;
 
-    @Column(nullable = false)
     private boolean available = true;
 
     @NotBlank(message = "serviceArea is required")
-    @Column(nullable = false)
     private String serviceArea;
 
     private Double currentLat;

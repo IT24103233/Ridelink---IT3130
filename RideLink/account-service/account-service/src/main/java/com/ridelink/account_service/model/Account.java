@@ -1,29 +1,27 @@
 package com.ridelink.account_service.model;
 
-import jakarta.persistence.*;
+import java.util.UUID;
 
-@Entity
-@Table(name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "accounts")
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Indexed(unique = true)
     private String email;
 
     // BCrypt hash only - never returned in any outbound DTO.
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Status status = Status.ACTIVE;
 
     public String getId() {
